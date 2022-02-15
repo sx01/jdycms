@@ -1,0 +1,395 @@
+{extend name='public/base' /}
+
+{block name='seo'}
+<title>{$title|default='页面标题'}</title>
+<meta name="keywords" content="{$keywords|default='页面关键字'}">
+<meta name="description" content="{$desc|default='页面描述'}">
+
+
+{/block}
+
+
+{block name='content'}
+
+<!-- 高级搜索 -->
+<div class="search-form" style="height: 120px;background-color: #fefefe;margin:0px 0px 10px 0px;padding:10px;  ">
+
+
+    <div class="row" style="margin-bottom: 10px;">
+
+        <div class="col-md-2">
+
+
+            <input name="name" class="form-control inputbc search-input" placeholder="请输入关键词" value="{$name}"
+                type="text">
+
+        </div>
+
+
+
+        <div class="col-md-2" style="text-align: right;">
+            <button class="btn btn-success" type="button" href="javascript:;" id="search"
+                url="{:url('index')}">查询</button>
+        </div>
+
+
+
+
+    </div>
+
+
+</div>
+<table class="table   table-striped" id="list">
+    <thead>
+        <tr>
+            <th>uid</th>
+            <th>昵称</th>
+            <th>用户名</th>
+            <th>真实姓名</th>
+            <th>手机号</th>
+            <th>注册时间</th> 
+            <th>所属分类</th> 
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        {volist name="list" id="vo"}
+
+
+        <tr id="list_{$vo.uid}">
+            <td>
+                {$vo.uid}
+            </td>
+            <td>
+
+
+                <span class="edit" id="edit_nickname_{$vo.uid}" data_uid="{$vo.uid}"
+                    field="nickname">{$vo.nickname}</span>
+                <span <?php if($vo['nickname']){?>style="display:none;"
+                    <?php }else{ ?>style="display:block;"
+                    <?php } ?> id="edit_text_nickname_{$vo.uid}">
+                    <input type="text" class="form-control edittxt" data_uid="{$vo.uid}" field="nickname"
+                        value="{$vo.nickname}">
+                </span>
+
+            </td>
+            <td>
+                {$vo.username}
+            </td>
+            <td>
+
+
+                <span class="edit" id="edit_realname_{$vo.uid}" data_uid="{$vo.uid}"
+                    field="realname">{$vo.realname}</span>
+                <span <?php if($vo['realname']){?>style="display:none;"
+                    <?php }else{ ?>style="display:block;"
+                    <?php } ?> id="edit_text_realname_{$vo.uid}">
+                    <input type="text" class="form-control edittxt" data_uid="{$vo.uid}" field="realname"
+                        value="{$vo.realname}">
+                </span>
+
+            </td>
+            <td>
+
+
+                <span class="edit" id="edit_phone_{$vo.uid}" data_uid="{$vo.uid}" field="phone">{$vo.phone}</span>
+                <span <?php if($vo['phone']){?>style="display:none;"
+                    <?php }else{ ?>style="display:block;"
+                    <?php } ?> id="edit_text_phone_{$vo.uid}">
+                    <input type="text" class="form-control edittxt" data_uid="{$vo.uid}" field="phone"
+                        value="{$vo.phone}">
+                </span>
+
+            </td>
+
+            <td>
+                {$vo.regdate|date="Y-m-d H:i:s"}
+            </td>
+
+
+ 
+            <td>
+                <select class="form-control cat_id" data-uid="{$vo.uid}">
+                    <option value="0" <?php if(!$vo['cat_id']){ ?> selected="selected"
+                        <?php } ?> >无分类
+                    </option>
+                    <?php
+
+foreach($catlist as $k=>$vv){ 
+    $space = "";
+    for($i=0;$i<$vv['count'];$i++){
+        $space .= "·";
+    }
+    
+    ?>
+                    <option value="{$vv.id}" <?php if($vo['cat_id']==$vv['id']){ ?> selected="selected"
+                        <?php } ?> > |{$space} {$vv.name}
+                    </option>
+
+                    <?php } ?>
+                </select>
+            </td>
+
+          <td>
+
+
+            <a id="status_{$vo.uid}" href="javascript:"
+                class="btn <?php if($vo['status'] == 0){ ?> btn-success <?php }else{ ?> btn-danger <?php } ?> btn-block btn-xs status"
+                data-uid="{$vo.uid}" data-status="{$vo.status}">
+                <?php if($vo['status'] == 0){ ?> 待审核
+                <?php }else{ ?> 通过审核
+                <?php } ?>
+            </a>
+
+            <a class="btn btn-danger btn-block btn-xs delete" style="display: none;" data-uid="{$vo.uid}">删除</a>
+
+            <a class="btn btn-danger btn-block btn-xs editup" data-username="{$vo.username}"
+                data-uid="{$vo.uid}">修改用户名和密码</a>
+            </td>
+        </tr>
+        {/volist}
+
+    </tbody>
+</table>
+
+
+{:htmlspecialchars_decode($page)}
+<div class="modal fade" tabindex="-1" role="dialog" id="editusernamepasswordModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">修改用户名和密码</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" id="uid">
+                        <label for="username" class="control-label">用户名:</label>
+                        <input type="text" class="form-control" id="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="control-label">密码:</label>
+                        <input type="text" class="form-control" id="password">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="qureneditup">确认修改</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+{/block}
+
+
+
+
+
+{block name='js'}
+
+<script>
+
+
+
+    $(document).ready(function () {
+
+       
+
+
+     
+
+        $(".cat_id").change(function () {
+
+            var dquid = $(this).attr("data-uid");
+            var field = "cat_id";
+            var value = $(this).val();
+            $.get("{:url('editfield')}", { "uid": dquid, "field": field, "value": value },
+                function (data) {
+                    if (data.status) {
+                        alert("修改分类成功！");
+                    } else {
+                        alert("修改失败！请再试下！");
+                    }
+                });
+
+        });
+
+        $("#qureneditup").click(function () {
+            var dquid = $("#uid").val();
+            var username = $("#username").val();
+            var password = $("#password").val();
+
+            if (username == "") {
+                alert("用户名不能为空！");
+                return false;
+            }
+            if (password == "") {
+                alert("密码不能为空！");
+                return false;
+            }
+
+            $.get("{:url('editup')}", { "uid": dquid, "username": username, "password": password },
+                function (data) {
+                    if (data.status) {
+                        alert(data.message);
+                        $('#editusernamepasswordModal').modal("hide");
+                    } else {
+                        alert(data.message);
+                    }
+                });
+
+        });
+
+        $(".editup").click(function () {
+            var uid = $(this).attr('data-uid');
+            var username = $(this).attr('data-username');
+            $('#editusernamepasswordModal').modal("show");
+            $("#username").val(username);
+            $("#uid").val(uid);
+
+        });
+
+        $(".status").click(function () {
+            var uid = $(this).attr('data-uid');
+            var status = $(this).attr('data-status');
+            var value = 0;
+            var str = "待审核";
+            if (parseInt(status) == 1) {
+                value = 0;
+                str = "待审核";
+            } else {
+                value = 1;
+                str = "通过审核";
+            }
+
+
+            $.get("{:url('editfield')}", { "uid": uid, "field": "status", "value": value },
+                function (data) {
+                    if (data.status) {
+
+                        $("#status_" + uid).html(str);
+                        $("#status_" + uid).attr("data-status", value);
+
+                        if (value == 0) {
+                            $("#status_" + uid).addClass("btn-success");
+                            $("#status_" + uid).removeClass("btn-danger");
+                        } else {
+                            $("#status_" + uid).addClass("btn-danger");
+                            $("#status_" + uid).removeClass("btn-success");
+                        }
+
+
+
+                    } else {
+
+                        alert(data.message);
+                    }
+
+                });
+
+        });
+
+
+
+
+        //搜索功能
+        $("#search").click(function () {
+            var url = $(this).attr('url');
+            var query = $('.search-form').find('input').serialize();
+            query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g, '');
+            query = query.replace(/^&/g, '');
+            if (url.indexOf('?') > 0) {
+                url += '&' + query;
+            } else {
+                url += '?' + query;
+            }
+            window.location.href = url;
+        });
+        //回车搜索
+        $(".search-input").keyup(function (e) {
+            if (e.keyCode === 13) {
+                $("#search").click();
+                return false;
+            }
+        });
+
+
+
+
+        $(".delete").click(function () {
+
+            var uid = $(this).attr("data-uid");
+            //alert(id);
+            if (confirm('确认删除吗？')) {
+                $.get("{:url('admin/members/del')}", { "uid": uid },
+                    function (data) {
+                        if (data.status) {
+
+                            var tmphtml = "<div id=\"tmpalert\"  class=\"alert alert-warning alert-dismissible fade in\" role=\"alert\">"
+                                + "				         							      <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">"
+                                + "				         					      <span aria-hidden=\"true\">×</span></button>"
+                                + "				         					      <p id=\"tmpalert_p\"><strong>Holy guacamole!</strong> Best check yo self, you\'re not looking too good.</p>"
+                                + "				         					    </div>";
+
+                            $("#list_" + uid).after(tmphtml);
+                            $("#list_" + uid).remove();
+                            $("#tmpalert_p").html(data.tishi);
+                            setTimeout(function () {
+                                $("#tmpalert").alert('close');
+                            }, 1000);
+                        } else {
+                            alert(data.tishi);
+
+
+                        }
+
+                    });
+
+            }
+        });
+
+
+
+
+        //失去焦点时触发的时间
+        $('.edittxt').blur(function () {
+            var uid = $(this).attr("data_uid");
+            var field = $(this).attr("field");
+            var value = $(this).val();
+            $.get("{:url('editfield')}", { "uid": uid, "field": field, "value": value },
+                function (data) {
+                    if (data.status) {
+
+                        $("#edit_" + field + "_" + uid).html(value);
+                        $("#edit_" + field + "_" + uid).show();
+                        $("#edit_text_" + field + "_" + uid).hide();
+
+                    } else {
+
+                        alert("可能是网络不通或者其他原因，审核失败！请再试下！");
+                    }
+
+                });
+        });
+
+
+
+        //编辑字段
+        $('.edit').on('dblclick', function (e) {
+            var uid = $(this).attr("data_uid");
+            var field = $(this).attr("field");
+            $(this).hide();
+            $("#edit_text_" + field + "_" + uid).show();
+
+
+        });
+
+    });
+</script>
+
+
+{/block}

@@ -1,0 +1,87 @@
+<!--_footer 作为公共模版分离出去-->
+<style>
+    .bottomp{
+        text-align: center;
+        color: #9d9d9d;
+        line-height: 30px;
+    }
+    .bottomp a{ color: #9d9d9d;margin-left: 10px;}
+
+    .www-img-mask {
+        position: fixed;
+        z-index: 10001;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,.5);
+        display: none;
+    }
+    .www-img-pop {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        background: #fff;
+        padding: 30px;
+        z-index: 10002;
+    }
+    .www-img-pop .close {
+        cursor: pointer;
+        display: block;
+        position: absolute;
+        font-size: 14px;
+        right: 10px;
+        top: 10px;
+        color: #999;
+    }
+
+
+</style>
+<div  style="
+margin-top: 0px;
+width: 100%;
+background-color: #121c3d;
+color: #9d9d9d;
+position: fixed;
+right: 0;
+left: 0;
+z-index: 1030;
+bottom: 0px;
+
+padding-top: 10px;">
+    <div class="container"  >
+
+        <p   class="bottomp">
+
+            {$kvlist['客服热线']|default=''}  {$kvlist['客服邮箱']|default=''} {$kvlist['公司名称']|default=''}  {$kvlist['版权信息']|default=''} {:htmlspecialchars_decode(isset($kvlist['icp备案'])?$kvlist['icp备案']:'')}<br />
+           
+            <?php
+
+            $dblist = getContentListByCatId(5,10);
+            foreach($dblist as $k=>$v){
+
+
+            ?>
+            <a href="{:url('index/dynamic/index',['id'=>$v['id']])}">{$v['title']}</a>
+            <?php } ?>
+
+          
+            <br />
+            {$kvlist['网站名称']|default=''} {$kvlist['一句话介绍']|default=''}
+
+        </p>
+
+
+
+
+    </div>
+</div>
+<script src="{__STATIC__}/js/jquery.min.js"></script>
+
+<!-- Bootstrap core JS file
+  注意：此文件跟随官网最新版本更新，随时会有改变。建议使用下面v3.0.3版本的CDN链接！
+ -->
+
+<!-- Hi，如果你要在自己的网站上引入bootstrap JS文件的话，请使用当前最新版本v3.0.3的CDN链接，页面加载速度会更快！-->
+<script src="{__STATIC__}/js/bootstrap.min.js"></script>

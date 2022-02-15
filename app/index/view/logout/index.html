@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+ 
+    <title>用户退出-{$kvList['网站名称']}</title>
+    <meta name="keywords" content="{$kvList['网站SEO关键词']}">
+    <meta name="description" content="{$kvList['网站SEO描述']}">
+   
+    {include file="public/meta"}
+  </head>
+  <body>
+   
+
+ 
+
+
+
+</head>
+<body>
+  {include file="public/header"}
+ 
+
+ <div class="container">
+  <div class="row" style="margin-top: 20px;margin-bottom: 20px;">
+    <div class="col-md-4 col-md-offset-4">
+      
+    </div>
+  </div>
+ </div>
+ {include file="public/footer"}
+ 
+ <script>
+
+$(document).ready(function(){
+  let token = "{$token}";
+  let url = "{:url('api/logout/index')}";
+  $.ajax({
+    url: url, 
+    type: "POST",
+    data: {},
+    dataType: "json",
+    headers: { 'ACCESS-TOKEN': token },
+    success: function (data, textStatus, jqXHR) {
+
+      if (data.status == 1) {
+
+        $.removeCookie('token', { path: '/' });
+        $.removeCookie('nickname', { path: '/' });
+        $.removeCookie('avatar', { path: '/' });
+
+
+        window.location.href = "/index/index/index";
+
+      } else {
+        alert(data.message);
+      }
+    }
+
+  });
+     
+
+});
+ </script>
+
+</body>
+</html>

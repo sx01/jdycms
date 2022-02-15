@@ -1,0 +1,116 @@
+{extend name='public/base' /}
+
+{block name='seo'}
+<title>{$title|default='页面标题'}</title>
+<meta name="keywords" content="{$keywords|default='页面关键字'}">
+<meta name="description" content="{$desc|default='页面描述'}">
+
+
+{/block}
+
+
+{block name='content'}
+
+<p>
+
+    <a href="{:url('add')}" class="btn btn-success" title="添加分类" >添加分类</a>
+</p>
+
+<ul class="list-group">
+    <?php
+
+          foreach($list as $k=>$v){ ?>
+    <li id="newstypeli_{$v.id}" style="text-indent:{$v['count']*20}px;height: 30px;"  >
+        <neq name="v.count" value="1">| -- </neq> {$v.name}(id:{$v.id})
+        <a href="{:url('edit',array('id'=>$v['id']))}" class="edit" title="编辑分类" >编</a>
+        <a href="javascript:" class="del" data_id="{$v.id}" title="删除分类" >删</a>
+
+        <a title="{$v.name}下的内容" href="{:url('index?catid='.$v['id'])}">
+            查
+        </a>
+    </li>
+
+    <?php } ?>
+
+</ul>
+
+{/block}
+
+
+{block name='js'}
+
+<script>
+
+
+
+
+
+$(document).ready(function() {
+
+    $(".del").click(function(){
+
+        var newstypeid=$(this).attr("data_id");
+
+
+        if(confirm('确认删除吗？')){
+            $.get("{:url('del')}", { "id": newstypeid },
+                    function(data){
+                        if(data.status){
+
+
+
+                            var   	tmphtml="<div id=\"tmpalert\"  class=\"alert alert-warning alert-dismissible fade in\" role=\"alert\">"
+                                    +"				         							      <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">"
+                                    +"				         					      <span aria-hidden=\"true\">×</span></button>"
+                                    +"				         					      <p id=\"tmpalert_p\"><strong>Holy guacamole!</strong> Best check yo self, you\'re not looking too good.</p>"
+                                    +"				         					    </div>";
+
+                            $("#newstypeli_"+newstypeid).after(tmphtml);
+                            $("#newstypeli_"+newstypeid).remove();
+                            $("#tmpalert_p").html(data.tishi);
+                            setTimeout(function(){
+                                $("#tmpalert").alert('close');
+                            },1000);
+
+                        }else{
+                            alert(data.tishi);
+
+
+                        }
+
+                    });
+
+        }
+
+
+
+    });
+
+
+
+
+
+
+    $("#send_btn").click(function(){
+
+
+        var title = $( 'input[name=title]' );
+
+        if(title.val() == ""){
+            alert(cname+'名称不能为空');
+            title.focus();
+            return;
+        }
+    });
+
+
+});
+
+
+
+
+
+</script>
+
+
+{/block}

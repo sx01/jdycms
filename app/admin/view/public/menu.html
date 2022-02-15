@@ -1,0 +1,62 @@
+
+<!--_menu 作为公共模版分离出去-->
+
+
+    <div class="row" style="margin-top: 20px;text-align: center;">
+        <div class="list-group" >
+
+
+
+
+
+
+
+        
+           <?php if($controllentname=="Members" || $controllentname=="MembersCat"){ ?>
+            <!--<a href="#" class="list-group-item  " style="background-color: #5cb85c;color: #fff;">任务</a>-->
+
+            <a href="{:url('Members/index',['type'=>0])}"     class="<?php if($controllentname=="Members" && $actionname=="index" && $type==0 ){ ?>  active <?php } ?> list-group-item">
+              会员管理
+            </a>
+
+            <a href="{:url('membersCat/index')}"     class="<?php if($controllentname=="MembersCat"){ ?>  active <?php } ?> list-group-item">
+             会员分类
+           </a>
+         
+          
+
+           <?php }elseif($controllentname=="Dynamic" || $controllentname=="DynamicCat" || $controllentname=="DynamicCatField"){ ?>
+            <!--<a href="#" class="list-group-item  " style="background-color: #5cb85c;color: #fff;">任务</a>-->
+
+            <a href="{:url('dynamic/index')}"     class="<?php if($controllentname=="Dynamic" && $actionname=="index" ){ ?>  active <?php } ?> list-group-item">
+           动态内容管理
+            </a>
+
+            <a href="{:url('DynamicCat/index')}"     class="<?php if($controllentname=="DynamicCat" && $actionname=="index" ){ ?>  active <?php } ?> list-group-item">
+              动态内容分类管理
+           </a>
+
+           
+           <a href="{:url('DynamicCatField/index')}"     class="<?php if($controllentname=="DynamicCatField" && $actionname=="index" ){ ?>  active <?php } ?> list-group-item">
+            动态内容分类拓展字段管理
+           </a>
+
+
+        
+
+            <?php
+
+
+        }
+
+
+        ?>
+
+
+        </div>
+    </div>
+
+
+
+
+<!--/_menu 作为公共模版分离出去-->

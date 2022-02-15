@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+  <title>{$title}_固安大树为企业服务_网站建设_小程序开发_简单实用_企业网站小程序_制作_开发-{$kvlist['网站名称']|default=""}</title>
+  <meta name="keywords" content="用户登录,{$kvlist['网站关键词']|default='网站建设,网站制作,网站开发,建网站,网站维护,简单实用,升级更新,小程序'}">
+  <meta name="description"
+    content="{$kvlist['网站描述']|default='大树网络一直致力于网站建设小程序开发的体系化，流程化，无我化;解放决策者思想，一切从实际情况出发,用简单实用的方式传达企业形象;服务热线:199-0326-5220'}" />
+  {include file='public/meta' /}
+ 
+  <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+  <!-- 警告：通过 file:// 协议（就是直接将 html 页面拖拽到浏览器中）访问页面时 Respond.js 不起作用 -->
+  <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+</head>
+ 
+<body>
+
+ 
+    {include file='public/header' /}
+    
+   
+ 
+<style>
+
+    .table {
+        background: #FFF;
+        font-size: 12px;
+        border-top: 1px solid #e1e6eb;
+        margin-top: 8px;
+        border: 1px solid #e1e6eb;
+    }
+    .table {
+        font-size: 12px;
+    }
+    .table thead tr th {
+        padding: 8px 8px;
+        font-weight: normal;
+        color: #999;
+        border-bottom: 1px solid #e1e6eb;
+        background-color: #F5F6FA;
+    }
+    .table tbody tr td {
+        padding: 12px 8px;
+        border-top: 0px;
+        border-bottom: 1px solid #e1e6eb;
+        vertical-align: middle;
+    }
+
+    .state-column {
+        width: 8px;
+        padding-left: 4px;
+        padding-right: 4px;
+    }
+
+    .state-column .state-unread {
+        font-size: 16px;
+        color: #e83c1e;
+    }
+
+    .title-column {
+        width: 60%;
+    }
+
+    .title-unread {
+        color: #000;
+    }
+    a {
+        color: #06C;
+        cursor: pointer;
+    }
+    .column-text {
+        color: #999;
+    }
+    @media (max-width: 767px) {
+        .title-column {
+            width: 30%;
+        }
+    }
+
+</style>
+ 
+ 
+
+<div class="container-fluid" style="background: #f8f8f8;">
+
+    <!--用户中心-->
+    <div class="container" style="margin-top:10px;">
+
+
+
+        <div style="clear: both;height: 10px;"></div>
+
+        <div class="row">
+
+           
+
+            <div class="col-md-12" style="margin: 0px;
+padding: 0px;">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h3 id="panel-title" class="panel-title">
+                            修改资料<a class="anchorjs-link pull-right" href="/">
+							<span
+                                    class="anchorjs-icon">不修改了，返回首页</span></a>
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <!-- Three columns of text below the carousel -->
+
+
+                        <div class="row" style="margin: 0px;">
+
+
+
+
+
+                            <form class="form-horizontal" action="" method="post" enctype="multipart/form-data" onsubmit="return frm_submit();">
+
+                                <div class="form-group">
+                                    <label for="nickname" class="col-sm-2 control-label">昵称</label>
+                                    <div class="col-sm-4">
+
+                                        <input type="text" id="nickname" class="form-control inputbc" placeholder="请输入昵称"   value="{$member.nickname}" name="nickname">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="realname" class="col-sm-2 control-label">真实姓名</label>
+                                    <div class="col-sm-4">
+
+                                        <input type="text" id="realname" class="form-control inputbc" placeholder="请输入真实姓名"   value="{$member.realname}" name="realname">
+                                    </div>
+                                </div>
+
+                                
+
+
+
+
+                                <div class="form-group">
+                                    <label for="sex" class="col-sm-2 control-label">性别</label>
+                                    <div class="col-sm-4">
+                                        <?php $sex=$member['sex'];
+
+                                        ?>
+                                        <select class="form-control inputbc" name="sex">
+                                            <option value="0" <?php if($sex == 0){ ?> selected="selected" <?php } ?> >*</option>
+                                            <option value="1" <?php if($sex == 1){ ?>selected="selected" <?php } ?> >男</option>
+                                            <option value="2" <?php if($sex == 2){ ?>selected="selected" <?php } ?> >女</option>
+
+                                        </select>
+
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone" class="col-sm-2 control-label">手机号</label>
+                                    <div class="col-sm-4">
+                                        <input type="text" id="phone" class="form-control inputbc" placeholder="手机号"      value="{$member.phone}" name="phone">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="weixin" class="col-sm-2 control-label">微信</label>
+                                    <div class="col-sm-4">
+                                        <input type="text" id="weixin" class="form-control inputbc" placeholder="微信"      value="{$member.weixin}" name="weixin">
+                                    </div>
+                                </div>
+                            
+
+                                <div class="form-group">
+                                    <label for="pic" class="col-sm-2 control-label">头像</label>
+
+                                    <div class="col-sm-3">
+                                        <script type="text/javascript" src="{__STATIC__}/js/PreviewImage.js"></script>
+                                        <div id="divPreview">
+                                            <img id="imgHeadPhoto" class="img-circle" src="{$member.avatar}" width="120" height="120" style="min-height: 120px;"   alt="" />
+                                        </div>
+
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div style="width: 100%;
+height: 68px;">
+                                            <div class="posterimg_add_btn" >选择图片<input type="file" class="form-control inputbc" style="border: 0px;
+height: 40px;
+padding-top: 0px;position:absolute; right:0; top:0; cursor: pointer; opacity:0; filter:alpha(opacity=0);" name="pic" id="pic" onChange="PreviewImage(this, 'imgHeadPhoto', 'divPreview');" placeholder="选择您要上传的图片">
+                                            </div>
+                                        </div>
+                                        <div style="width: 100%;height: 30px;"> 温馨提示：图片尺寸建议为：200*200，图片小于2M<br />支持格式：  .jpg .gif .png </div>
+
+
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <div class="col-sm-8 col-sm-offset-2">
+                                        <div class="alert alert-warning alert-dismissible" role="alert" style="margin-bottom: 0px;">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <strong>提示!</strong> 如不修改密码留空即可.
+                                        </div></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="old">原密码</label>
+                                    <div class="col-sm-4">
+                                        <input type="password" id="old"  class="form-control inputbc" placeholder="请输入原密码"  errormsg="密码为6-20位" nullmsg="请填写密码" datatype="*6-20" name="old">
+                                    </div>
+                                </div>
+
+
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="password">新密码</label>
+                                    <div class="col-sm-4">
+                                        <input type="password" id="password"  class="form-control inputbc" placeholder="请输入新密码"  errormsg="密码为6-20位" nullmsg="请填写密码" datatype="*6-20" name="password">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="repassword">新确认密码</label>
+                                    <div class="col-sm-4">
+                                        <input type="password" id="repassword"  class="form-control inputbc" placeholder="请输入新确认密码"  errormsg="密码为6-20位" nullmsg="请填写密码" datatype="*6-20" name="repassword">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+
+                                    <div class="col-sm-2 control-label"></div>
+                                    <div class="col-sm-8">
+                                        <button type="submit" class="btn btn-success ">修改资料</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div style="clear: both;height: 10px;"></div>
+    </div>
+</div>
+
+
+{include file='public/footer' /}
+
+ 
+<script type="text/javascript">
+
+
+
+
+    $(document)
+            .ready(
+            function() {
+                <?php
+
+                if($updatepic){
+
+                    ?>
+
+                    var picurl = '{$member.avatar}';
+
+                    $("#imgHeadPhoto").attr('src', picurl + "?t=" + Math.random());
+
+                    $("#avatart_img").attr('src', picurl + "?t=" + Math.random());
+
+
+
+                <?php
+
+                }
+
+                ?>
+
+
+
+
+
+
+                $("#email").keyup(function(){
+
+                    var search_str = /^[\w\-\.]+@[\w\-\.]+(\.\w+)+$/;
+
+                    if(!search_str.test($('#email').val())){
+
+                        $("#checkemail").html("邮箱格式不正确 !");
+
+                        return false;
+                    }
+                    if($('#email').val()==email){
+                        $("#checkemail").html("email没有改变 !");
+                        return false;
+                    }
+
+                    $.get("{:url('index/user/checkemail')}", { "email": $('#email').val() },
+                            function(data){
+                                if(data.jg){
+
+
+
+                                    $("#checkemail").html(data.tishi);
+
+                                }else{
+                                    $("#checkemail").html(data.tishi);
+
+
+                                }
+
+                            });
+                });
+
+
+            });
+
+    function frm_submit(){
+
+        //company name phone  goutong email xmsm
+
+        var password = $('#password').val();
+
+        var repassword = $('#repassword').val();
+
+        var old=$('#old').val();
+        if(password !="" || repassword!="")
+        {
+            if(old==""){
+                alert("如果修改密码请填写原密码！");
+                $("#old").focus();
+                return false;
+            }
+        }
+        if(password!=repassword){
+            alert("请填两次密码输入一致！");
+            $("#password").focus();
+            return false;
+        }
+
+        return true;
+
+
+    }
+
+
+    function isEmail(value) {
+
+        var pattern ="/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/";
+        if (!pattern.test(value)) {
+            return false;
+        }
+        return true;
+    }
+
+</script>
+ 
+</body>
+</html>

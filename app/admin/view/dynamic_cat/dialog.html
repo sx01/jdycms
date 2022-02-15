@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>添加商品分类</title>
+    <link rel="stylesheet" href="../lib/layui-v2.5.4/css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/public.css" media="all">
+</head>
+<body>
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+    <legend>商品分类管理</legend>
+</fieldset>
+
+<form class="layui-form" action="">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label" style="width: 200px;">父级分类</label>
+            <div class="layui-input-inline">
+                <select name="parent" id="classif"></select>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width: 200px;">商品分类</label>
+        <div class="layui-input-inline">
+            <input type="text" name="name" lay-verify="name" autocomplete="off" placeholder="请输入标分类名称"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width: 200px;"></label>
+        <div class="layui-input-inline">
+            <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="demo1">立即提交</button>
+        </div>
+    </div>
+</form>
+<script src="../lib/layui-v2.5.4/layui.js" charset="utf-8"></script>
+<script src="../lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+<script src="../js/common.js" charset="utf-8"></script>
+<script>
+
+    let moke = {$dynamicCats|raw} ;
+
+    layui.use(['form'], function () {
+       
+        function queryClassif() { // 请求分类 后端接口
+            let html = '';
+            moke.forEach(function (item){
+                html += '<li class="child-ele" data-id="'+item.id+'" pid="'+item.pid+'">'+item.name+'</li>';
+            });
+            $('.p-0').html(html)
+        }
+        queryClassif(); // 获取后端分类数据
+
+        $('body').on('click','.child-ele',function(){
+         let pid = $(this).attr("data-id");
+         let type = $(this).parent().attr('type');
+         let pcls = '.p-' + (1+parseInt(type));
+         $(this).parent().children('li').removeClass('active');
+         $(this).addClass('active');
+         if(pcls === '.p-3'){
+             return false;
+         }
+         $(".p-3").html("");
+         $(".p-2").html("");
+
+         let url = '/admin/dynamicCat/getByPid?pid=' + pid ;
+         layObj.get(url,function(res){
+             moke = res.result;
+             console.log(moke);
+             let html = "";
+             moke.forEach(function(item){
+                 html +=  '<li class="child-ele" data-id="'+item.id+'"  pid="'+item.pid+'">'+item.name+'</li>' ;
+             });
+             console.log(pcls,'pcls');
+             $(pcls).html(html);
+         });
+
+        });
+
+        $('html').on('click','.classify-btn',function(){
+            let p0 = $('.p-0 .active'),
+              p1 = $('.p-1 .active'),
+             p2= $('.p-2 .active');
+        })
+
+        //监听提交
+        form.on('submit(demo1)', function (data) {
+            console.log(data.field, '最终的提交信息')
+            let url = '';
+            layObj.post(url,data,function (res) {
+
+            });
+            // $ajax({
+            //     url: '{:u("admin/add")}?val=' + data.field,
+            //     success: (res) => {
+            //        setTimeout('window.location.reload()',1000);
+            //     }
+            // })
+
+            return false;
+        });
+
+    })
+</script>
+</body>
+</html>

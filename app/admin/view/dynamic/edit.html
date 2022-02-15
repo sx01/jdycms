@@ -1,0 +1,446 @@
+{include file='public/meta' /}
+
+
+<title>{$title|default='页面标题'}</title>
+<meta name="keywords" content="{$keywords|default='页面关键字'}">
+<meta name="description" content="{$desc|default='页面描述'}">
+
+</head>
+
+<body>
+
+
+    {include file='public/header' /}
+
+
+
+    <div class="container-fluid">
+
+        <div class="container" style="margin-top:10px;margin-bottom: 10px;">
+
+
+
+
+            <div class="row" style="background-color: #fefefe;padding-top:20px;margin: 0px;margin-top: 10px; ">
+                <div class="col-md-12">
+                    <!--客户中心-->
+
+
+
+
+
+                    <link rel="stylesheet" href="/kindeditor/themes/default/default.css" />
+                    <script charset="utf-8" src="/kindeditor/kindeditor-min.js"></script>
+                    <script charset="utf-8" src="/kindeditor/lang/zh_CN.js"></script>
+
+                    <script type="text/javascript" src="{__STATIC__}/js/PreviewImage.js"></script>
+                    <form class="form-horizontal" action="/admin/dynamic/save" enctype="multipart/form-data"
+                        method="post" onsubmit="return btnOK_onclick();">
+
+
+
+                        <div class="form-group" style="margin-bottom: 66px;border-bottom: 1px solid #38AF87; ">
+                            <label class="col-sm-2 control-label" style="text-align: left;">编辑</label>
+                            <div class="col-sm-10">
+
+
+
+
+                                <a style="float: right;margin-bottom: 20px;" class="btn btn-success"
+                                    href="{$fanhuiurl}"><span class="glyphicon glyphicon-menu-left"></span> 返回</a>
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">标题<b class="xingb">*</b></label>
+                            <div class="col-sm-8">
+                                <input type="hidden" id="id" name="id" value="{$id}" />
+                                <input type="text" id="title" class="form-control inputbc" placeholder="请输入标题"
+                                    value="{$find.title}" name="title">
+                            </div>
+                        </div>
+
+
+
+
+
+
+                        <div class="form-group">
+
+
+
+                            <label for="create_time" class="col-sm-2 control-label">时间<b class="xingb">*</b></label>
+                            <div class="col-sm-3">
+
+                                <input type="text" id="create_time" class="form-control inputbc" placeholder="请输入发布时间"
+                                    value="{$find.create_time|date='Y-m-d H:i:s'}" name="create_time">
+
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+
+                            <label for="keywords" class="col-sm-2 control-label">关键词<b class="xingb">*</b></label>
+                            <div class="col-sm-3">
+
+                                <input type="text" id="keywords" class="form-control inputbc"
+                                    placeholder="请输入关键词 (如多个关键词，请用英文逗号隔开)" value="{$find.keywords}" name="keywords">
+                            </div>
+
+                            <label for="catid" class="col-sm-2 control-label">选择分类<b class="xingb">*</b></label>
+                            <div class="col-sm-3">
+
+                                <select id="cat_id" class="form-control inputbc" name="cat_id">
+                                    <option value="0" <?php if($find['cat_id']){?>
+                                        <?php }else{ ?>selected="selected"
+                                        <?php } ?> >请选择分类
+                                    </option>
+                                    <?php
+
+          foreach($catlist as $k=>$v){ ?>
+                                    <option value="{$v.id}" <?php if($find['cat_id']==$v['id']){ ?> selected="selected"
+                                        <?php }  ?> style="text-indent:{$v['count']*20}px;"> <neq name="v.count"
+                                            value="1">| -- </neq> {$v.name}
+                                    </option>
+
+                                    <?php } ?>
+                                </select>
+
+
+
+                            </div>
+
+                        </div>
+
+
+
+
+                        <div class="form-group">
+                            <label for="description" class="col-sm-2 control-label">摘要 <b class="xingb">*</b></label>
+                            <div class="col-sm-8">
+                                <textarea name="description" id="description" cols="80" style="line-height: 22px;"
+                                    class="form-control inputbc"
+                                    placeholder="(摘要、导读，SEO简单描述)">{$find.description}</textarea>
+
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="link_url" class="col-sm-2 control-label">外链接（如需要外链填写外链接，默认为空）</label>
+                            <div class="col-sm-8">
+
+                                <input type="text" id="link_url" class="form-control inputbc"
+                                    placeholder="如果文章需要外链可以设定链接,如此内容为海报需要连接别的内容,否则默认空" value="{$find.link_url}"
+                                    name="link_url">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="view" class="col-sm-2 control-label">浏览量</label>
+                            <div class="col-sm-8">
+
+                                <input type="text" id="view" class="form-control inputbc" placeholder="浏览量"
+                                    value="{$find.view + 1}" name="view">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="paixu" class="col-sm-2 control-label">排序</label>
+                            <div class="col-sm-8">
+
+                                <input type="text" id="paixu" class="form-control inputbc" placeholder="排序"
+                                    value="{$find.paixu}" name="paixu">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="picfile" class="col-sm-2 control-label">封面图<b class="xingb">*</b></label>
+
+                            <div class="col-sm-3">
+
+                                <div id="divPreview">
+                                    <img id="imgHeadPhoto" src="{$find.pic_path|default='/static/images/posterImg.png'}"
+                                        width="200" style="min-height: 100px;" alt="" />
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-sm-6" id="bendishangchuan">
+                                <div style="width: 100%;
+height: 68px;">
+                                    <div class="posterimg_add_btn">添加图片<input type="file" class="form-control inputbc"
+                                            style="border: 0px;
+height: 40px;
+padding-top: 0px;position:absolute; right:0; top:0; cursor: pointer; opacity:0; filter:alpha(opacity=0);"
+                                            name="picfile" id="picfile"
+                                            onChange="PreviewImage(this, 'imgHeadPhoto', 'divPreview');"
+                                            placeholder="选择您要上传的图片">
+                                    </div>
+                                </div>
+                                <div style="width: 100%;height: 30px;color: #38AF87;">
+                                    温馨提示：图片尺寸建议为：美观大方，图片小于1M<br />支持格式： .jpg .gif .png </div>
+
+
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+                        <div class="form-group">
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-10">
+                                <style>
+                                    .ke-container {
+                                        display: block;
+                                        border: 1px solid #38AF87;
+                                        background-color: #FFF;
+                                        overflow: hidden;
+                                        margin: 0;
+                                        padding: 0;
+                                    }
+                                </style>
+
+
+
+                                <textarea id="content" name="content"
+                                    style="width:100%;height:600px;visibility:hidden;">{$find.content}</textarea>
+                                <script>
+                                    var editor;
+                                    KindEditor.ready(function (K) {
+                                        editor = K.create('textarea[name="content"]', {
+                                            allowFileManager: true,
+                                            urlType: 'absolute'
+                                        });
+                                    });
+                                </script>
+                            </div>
+                        </div>
+
+
+
+                        <div id="fielddiv">
+
+                        </div>
+
+
+                        <div>{:token_field()}</div>
+
+
+
+
+                        <div class="form-group">
+
+                            <div class="col-sm-2 control-label"></div>
+                            <div class="col-sm-8">
+                                <button type="submit" id="btnOK" class="btn btn-success"
+                                    onclick="return btnOK_onclick()">提交</button>
+                            </div>
+                        </div>
+
+                    </form>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {include file='public/footer' /}
+
+    <script>
+
+        jeDate({
+            dateCell: "#create_time",
+            format: "YYYY-MM-DD hh:mm:ss",
+            isinitVal: true,
+            isTime: true, //isClear:false,
+            minDate: "2013-09-19 00:00:00",
+            okfun: function (val) { alert(val) }
+        });
+
+        function get_catFieldList(cat_id) {
+
+            $("#fielddiv").html("");
+            $.get("{:url('admin/dynamic/getCatFieldList')}", { "cat_id": cat_id,"dynamic_id":$("#id").val()},
+                function (data) {
+                    if (data.status) {
+
+                        data.result.forEach(function (v, i) {
+                            var tmphtml = "";
+                            if (v.type_id == 2) {
+
+
+                                tmphtml += '         <div class="form-group">';
+                                tmphtml += '  <label for="file_' + v.id + '" class="col-sm-2 control-label">' + v.name + '<b class="xingb">*</b></label>';
+
+                                tmphtml += '    <div class="col-sm-3">';
+
+                                tmphtml += '       <div id="divpreview_' + v.id + '">';
+                                    if(v.content!=""){
+                                        tmphtml += '        <img id="imgheadphoto_' + v.id + '" src="'+v.content+'" width="200" style="min-height: 100px;"   alt="" />';
+                                    }else{
+                                        tmphtml += '        <img id="imgheadphoto_' + v.id + '" src="{__STATIC__}/images/posterImg.png" width="200" style="min-height: 100px;"   alt="" />';
+                                    }
+
+                                tmphtml += '    </div>';
+
+                                tmphtml += '  </div>';
+
+
+                                tmphtml += '    <div class="col-sm-6" id="bendishangchuan" >';
+                                tmphtml += '     <div style="width: 100%;height: 68px;">';
+                                tmphtml += '   <div class="posterimg_add_btn" >添加' + v.name + '<input type="file" class="form-control inputbc filepic" style="border: 0px;height: 40px;padding-top: 0px;position:absolute; right:0; top:0; cursor: pointer; opacity:0; filter:alpha(opacity=0);"';
+                                tmphtml += '  name="file_' + v.id + '" id="file_' + v.id + '" data-id="'+v.id+'"  placeholder="选择您要上传的图片">';
+                                tmphtml += '   </div>';
+                                tmphtml += '  </div>';
+                                tmphtml += '  <div style="width: 100%;height: 30px;color: #38AF87;"> 温馨提示：  图片小于2M<br />支持格式：  .jpg .gif .png </div>';
+
+
+                                tmphtml += '      </div>';
+                                tmphtml += '       </div>';
+
+
+                            } else if (v.type_id == 3) {
+
+
+                                tmphtml += '         <div class="form-group">';
+                                tmphtml += '  <label for="file_' + v.id + '" class="col-sm-2 control-label">' + v.name + '<b class="xingb">*</b></label>';
+
+
+                                tmphtml += '    <div class="col-sm-6" id="bendishangchuan" >';
+                                tmphtml += '     <div style="width: 100%;height:auto;">';
+                                tmphtml += '   <div class="posterimg_add_btn" style="margin:0px 10px;">添加' + v.name + '<input type="file" class="form-control inputbc" style="border: 0px;height: 40px;padding-top: 0px;position:absolute; right:0; top:0; cursor: pointer; opacity:0; filter:alpha(opacity=0);"';
+                                tmphtml += '  name="file_' + v.id + '" id="file_' + v.id + '" " placeholder="选择您要上传的' + v.name + '">';
+                                tmphtml += '   </div>';
+                                tmphtml += '<div><p id="file_path_' + v.id + '"> '+v.content+'</p></div>';
+                               
+
+                                tmphtml += '  </div>';
+                                tmphtml += '  <div style="width: 100%;height: 30px;color: #38AF87;"> 温馨提示：   <br />支持格式：  .mp4  </div>';
+
+
+                                tmphtml += '      </div>';
+                                tmphtml += '       </div>';
+
+
+                            } else if (v.type_id == 4) {
+
+
+                                tmphtml += '         <div class="form-group">';
+                                tmphtml += '  <label for="file_' + v.id + '" class="col-sm-2 control-label">' + v.name + '<b class="xingb">*</b></label>';
+
+
+                                tmphtml += '    <div class="col-sm-6" id="bendishangchuan" >';
+                                tmphtml += '     <div style="width: 100%;height: auto;">';
+                                tmphtml += '   <div class="posterimg_add_btn" style="margin:0px 10px;" >添加' + v.name + '<input type="file" class="form-control inputbc" style="border: 0px;height: 40px;padding-top: 0px;position:absolute; right:0; top:0; cursor: pointer; opacity:0; filter:alpha(opacity=0);"';
+                                tmphtml += '  name="file_' + v.id + '" id="file_' + v.id + '" " placeholder="选择您要上传的' + v.name + '">';
+                                tmphtml += '   </div>';
+                                tmphtml += '<div><p id="file_path_' + v.id + '"> '+v.content+'</p></div>';
+                                tmphtml += '  </div>';
+                                tmphtml += '  <div style="width: 100%;height: 30px;color: #38AF87;"> 温馨提示：  图片小于2M<br />支持格式：  .doc, .docx,.xls,.xlsx,.ppt,.pptx,.apk,.rar,.zip,.pdf  </div>';
+
+
+                                tmphtml += '      </div>';
+                                tmphtml += '       </div>';
+
+
+                            } else {
+                                tmphtml += ' <div class="form-group">';
+                                tmphtml += '    <label for="view" class="col-sm-2 control-label">' + v.name + '</label>';
+                                tmphtml += '   <div class="col-sm-8">';
+
+                                tmphtml += '      <input type="text" id="field_' + v.id + '" name="field_' + v.id + '" class="form-control inputbc" placeholder="' + v.name + '"   value="' + v.content + '" >';
+                                tmphtml += '  </div>';
+                                tmphtml += '   </div>';
+                            }
+
+
+
+
+
+                            $("#fielddiv").append(tmphtml);
+
+                        });
+
+
+
+                    } else {
+                        alert(data.tishi);
+
+
+                    }
+
+                });
+        }
+
+        $("document").ready(function () {
+
+            $("body").on("change", ".filepic", function(){  
+
+                let id = $(this).attr("data-id");
+                // alert(id);
+                let fileObj = document.getElementById("file_"+id);
+                PreviewImage(fileObj,"imgheadphoto_"+id,"divpreview_"+id);
+            
+            });
+
+            if ($("#cat_id").val()) {
+                console.log("执行了这里");
+                get_catFieldList($("#cat_id").val());
+            }
+            $("#cat_id").change(function () {
+
+                let cat_id = $(this).val();
+
+                get_catFieldList(cat_id);
+
+
+            });
+
+
+
+        });
+
+
+        function btnOK_onclick() {
+            var title = $("#title").val();
+
+            if (title == "") {
+                alert("标题不能为空");
+                $("#title").focus();
+                return false;
+            }
+
+
+
+            return true;
+        }
+
+
+        function isEmail(value) {
+
+            var pattern = "/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/";
+            if (!pattern.test(value)) {
+                return false;
+            }
+            return true;
+        }
+
+
+    </script>
+
+</body>
+
+</html>

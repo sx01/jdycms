@@ -1,0 +1,186 @@
+a{extend name='public/base' /}
+
+{block name='seo'}
+<title>{$title|default='页面标题'}</title>
+<meta name="keywords" content="{$keywords|default='页面关键字'}">
+<meta name="description" content="{$desc|default='页面描述'}">
+
+
+{/block}
+
+
+{block name='content'}
+
+<!-- 高级搜索 -->
+<div class="search-form" style="height: 120px;background-color: #fefefe;margin:0px 0px 10px 0px;padding:10px;  ">
+
+
+    <div class="row" style="margin-bottom: 10px;" >
+
+        <div class="col-md-2">
+
+
+            <input name="name" class="form-control inputbc search-input" placeholder="请输入关键词" value="{$name}"  type="text">
+
+        </div>
+
+        
+
+        <div class="col-md-2" style="text-align: right;">
+            <button class="btn btn-success" type="button" href="javascript:;" id="search" url="{:url('index',['cat_id'=>$cat_id])}">查询</button>
+        </div>
+
+
+        <div class="col-md-2" style="text-align: right;">
+            <a class="btn btn-success"   href="{:url('admin/dynamicCatField/add',['cat_id'=>$cat_id])}" >添加</a>
+        </div>
+
+    </div>
+
+    <div class="row" style="margin-bottom: 10px;" >
+        <div class="col-md-12" style="text-align: right;">
+        <a class="btn btn-success" href = "{:url('index')}">所有分类</a>
+        {volist name="dynamicCatList" id="vo"}
+        <a class="btn btn-success" href = "{:url('index',['cat_id'=>$vo['id']])}">{$dynamicCatList[$vo['id']]['name']}</a>
+
+        {/volist}
+        </div>
+    </div>
+
+
+</div>
+<table class="table   table-striped" id="list" >
+    <thead>
+    <tr>
+        <th>id</th>
+        <th>分类</th> 
+                    <th>字段名称</th> 
+                
+                    <th>字段类型</th>
+                    <th>排序</th>  
+                    <th class="text-center">创建时间</th> 
+          
+                    <th>操作管理</th>
+    </tr>
+    </thead>
+    <tbody>
+ {volist name="list" id="vo"}
+  
+
+ <tr id="list_{$vo.id}">
+    <td>
+        {$vo.id}
+    </td>
+    <td>
+        <a href = "{:url('index',['cat_id'=>$vo['cat_id']])}">   {$dynamicCatList[$vo['cat_id']]['name']|default="无分类"}</a>
+        </td>
+    <td>
+        {$vo.name}
+    </td>
+    <td>
+        {$fieldtypeList[$vo.type_id]['name']}
+    </td>
+ 
+    <td> 
+        {$vo.paixu}
+    </td>
+ 
+
+    <td>
+        {$vo.addtime|date="Y-m-d H:i:s"}
+    </td>
+     
+ 
+
+
+
+    <td>
+        <a class="layui-btn layui-btn-xs layui-btn-danger " href="/admin/dynamicCatField/edit?id={$vo.id}" target="_self"  data-id="{$vo.id}">编辑</a>
+        <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete del-child delete" data-ptype="1"
+           lay-event="delete" data-id="{$vo.id}">删除</a> 
+    </td>
+</tr>
+{/volist}
+
+    </tbody>
+</table>
+
+
+ 
+
+{/block}
+
+
+{block name='js'}
+
+<script>
+
+
+
+    $(document).ready(function(){
+
+       
+        //搜索功能
+        $("#search").click(function(){
+            var url = $(this).attr('url');
+            var query  = $('.search-form').find('input').serialize();
+            query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g,'');
+            query = query.replace(/^&/g,'');
+            if( url.indexOf('?')>0 ){
+                url += '&' + query;
+            }else{
+                url += '?' + query;
+            }
+            window.location.href = url;
+        });
+        //回车搜索
+        $(".search-input").keyup(function(e){
+            if(e.keyCode === 13){
+                $("#search").click();
+                return false;
+            }
+        });
+
+
+
+
+        $(".delete").click(function(){
+
+            var id = $(this).attr("data-id");
+            //alert(id);
+            if(confirm('确认删除吗？')){
+                $.get("{:url('admin/dynamicCatField/del')}", { "id": id },
+                        function(data){
+                            if(data.status){
+                           
+                                var   	tmphtml="<div id=\"tmpalert\"  class=\"alert alert-warning alert-dismissible fade in\" role=\"alert\">"
+                                        +"				         							      <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">"
+                                        +"				         					      <span aria-hidden=\"true\">×</span></button>"
+                                        +"				         					      <p id=\"tmpalert_p\"><strong>Holy guacamole!</strong> Best check yo self, you\'re not looking too good.</p>"
+                                        +"				         					    </div>";
+
+                                $("#list_"+id).after(tmphtml);
+                                $("#list_"+id).remove();
+                                $("#tmpalert_p").html(data.tishi);
+                                setTimeout(function(){
+                                    $("#tmpalert").alert('close');
+                                },1000);
+                            }else{
+                                alert(data.tishi);
+
+
+                            }
+
+                        });
+
+            }
+        });
+
+
+
+
+    });
+</script>
+
+
+{/block}

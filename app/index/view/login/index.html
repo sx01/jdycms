@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+  <title>用户登录_固安大树为企业服务_网站建设_小程序开发_简单实用_企业网站小程序_制作_开发-{$kvlist['网站名称']|default=""}</title>
+  <meta name="keywords" content="用户登录,{$kvlist['网站关键词']|default='网站建设,网站制作,网站开发,建网站,网站维护,简单实用,升级更新,小程序'}">
+  <meta name="description"
+    content="{$kvlist['网站描述']|default='大树网络一直致力于网站建设小程序开发的体系化，流程化，无我化;解放决策者思想，一切从实际情况出发,用简单实用的方式传达企业形象;服务热线:199-0326-5220'}" />
+  {include file='public/meta' /}
+ 
+  <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+  <!-- 警告：通过 file:// 协议（就是直接将 html 页面拖拽到浏览器中）访问页面时 Respond.js 不起作用 -->
+  <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+</head>
+ 
+<body>
+
+ 
+    {include file='public/header' /}
+
+  <style>
+
+   img{max-width: 100%;}
+    .ban_register{
+        width: 100%;
+        height: 529px; 
+        
+        display: none;
+    }
+    .registerPart {
+        padding: 0 30px;
+        background: #f8f8f8;
+        height: 529px;
+        text-align: center;
+    }
+    .registerPart h3 {
+        line-height: 93px;
+        text-align: center;
+        font-size: 30px;
+        color: #333;
+        margin-top: 0px;
+    margin-bottom: 0px;
+    }
+    
+    .registerPart .form-ctl {
+        margin: 20px 0 0;
+    }
+    .registerPart .form-ctl select,  .registerPart .form-ctl input[type="text"], .registerPart .form-ctl input[type="password"] {
+        width: 334px;
+        height: 30px;
+        line-height: 30px;
+        text-indent: 3px;
+        padding-left: 15px;
+        font-size: 12px;
+        background-color: #fff;
+        box-sizing: border-box;
+        font-family: "Microsoft YaHei";
+    }
+    
+    .registerPart .form-ctl .btn-primary {
+        width: 334px;
+        height: 40px;
+        border: none;
+        display: block;
+        box-sizing: border-box;
+        line-height: 40px;
+        background: #7d9f12;
+        font-size: 18px;
+        color: #fff;
+        text-align: center;
+        cursor: pointer;
+        margin: 0 auto;
+        padding: 0px;
+    }
+    
+    .registerPart .form_ctl button {
+        border: 0;
+        outline: none;
+        background-color: transparent;
+        color: #7d9f12;
+        cursor: pointer;
+    }
+    .ban_middle {
+        width: 100%;
+        height: 349px; 
+         
+    }
+    .loginPart {
+        width: 100%;
+        height: 349px;
+        float: right;
+        background: #f8f8f8;
+    }
+    .loginPart h3 {
+        line-height: 93px;
+        text-align: center;
+        font-size: 30px;
+        color: #333;
+        margin-top: 0px;
+    margin-bottom: 0px;
+    }
+    
+    .registerPart input, .loginPart input {
+        width: 334px;
+        height: 48px;
+        border: none;
+        display: block;
+        padding-left: 15px;
+        box-sizing: border-box;
+        font-size: 14px;
+        color: #999;
+        line-height: 48px;
+        margin: 0 auto 24px;
+        font-family: "Microsoft YaHei";
+    }
+    .loginPart .form-check {
+        width: 334px;
+        margin: 0 auto;
+        padding: 0px 10px;
+        overflow: hidden;
+    }
+    .loginPart .form-check .btn-default {
+        float: right;
+        color: #333;
+        border: 0;
+        outline: none;
+        background-color: transparent;
+        cursor: pointer;
+    }
+    .loginPart .login_btn {
+        background: #7d9f12;
+        font-size: 18px;
+        color: #fff;
+        text-align: center;
+    }
+    
+    .ban_middle .fix_tip {
+        width: 334px;
+        height: 48px;
+        border: 1px solid #f5e79e;
+        background: #f5e79e;
+        color: #8a6d3b;
+        padding-left: 40px;
+        box-sizing: border-box;
+        line-height: 48px;
+        position: absolute;
+        left: 34px;
+        top: 33px;
+        border-radius: 5px;
+        opacity: 0;
+    }
+        </style>
+    
+
+
+
+<div class="ban_middle" id="login">
+    <div class="loginPart">
+        <h3>登录</h3>
+   
+        <input type="text" name="login_username" id="login_username" placeholder="请输入账号">
+        <input type="password" name="login_password" id="login_password" placeholder=" 请输入密码">
+        <div class="form-check">
+         <a class="btn btn-default" href="javascript:" id="enroll" style="float: right">免费注册</a>
+        </div>
+        <input type="button" value="立即登录" id="login-btn" class="login_btn">
+    </div>
+    <div class="fix_tip">用户名错误</div>
+</div>
+
+
+<div class="ban_register" id="register" >
+    <div class="registerPart">
+        <h3 style="line-height: 56px;">注册</h3>
+                      
+     
+
+        <div class="form-ctl">
+         <input type="text" autocomplete="off" name="username" id="username" placeholder="请输入账号">
+        </div>
+      
+        <div class="form-ctl">
+        <input type="password" autocomplete="off" name="password" id="password" placeholder="登录使用的密码">
+        </div>
+        <div class="form-ctl">
+         <input type="password" autocomplete="off" name="repassword" id="repassword" placeholder="再次确认密码">
+        </div>                                                                  
+        <div class="form-ctl">
+            <input type="text" autocomplete="off" name="phone"  id="phone" placeholder="手机号码">
+        </div> 
+
+        <div class="form-ctl">
+          <input autocomplete="off" type="text" name="realname" id="realname" placeholder="请输入真实姓名">
+       </div>
+       <div class="form-ctl">
+        <input autocomplete="off" type="text" name="nickname" id="nickname" placeholder="请输入昵称">
+     </div>
+      
+
+
+        <div class="form-ctl">
+            <a class="btn btn-primary" id="login-btn-register">注册</a>
+        </div>
+
+        <div style="height: 30px;line-height: 30px;margin-top: 15px;padding-bottom: 15px;color: #333;
+        text-align: center;" class="form-ctl form_ctl">
+            已有账号，前往<button class="registered" type="button">登录</button>
+        </div>
+
+    </div>
+</div>
+
+
+
+{include file='public/footer' /}
+<script>
+ 
+var uid = '{$uid}';
+$(document).ready(function(){
+
+$(".registered").click(function(){
+
+ $("#register").hide();
+ $("#login").show();
+});
+$("#enroll").click(function(){
+
+$("#register").show();
+$("#login").hide();
+});
+
+$("#login-btn").click(function(){
+            if($("#login_username").val() == "") {
+                alert("请输入用户名");
+                $("#username").focus();
+                return false;
+            }
+            if ($("#login_password").val() == "") {
+                alert("请输入密码");
+                $("#password").focus();
+                return false;
+            }
+
+            var ajaxloginurl = "{:url('ajaxlogin')}"
+            $.ajax({
+                url: ajaxloginurl, //后台接收数据，进行统一下单操作的地址，填你自己的
+                dataType: 'json',
+                type: 'POST',
+                data: { 'username': $("#login_username").val(),   'password': $("#login_password").val() },
+                success: function (res) {
+                
+                    if (res.status == 1) {
+                      
+                        alert(res.tishi); 
+                        window.location.href = "{:url('index/index/index')}";
+                    } else {
+                        alert(res.tishi);
+                    }
+
+                }
+
+            });
+
+});
+
+$("#login-btn-register").click(function(){
+
+            if($("#username").val() == "") {
+                alert("请输入用户名");
+                $("#username").focus();
+                return false;
+            }
+            if($("#realname").val() == "") {
+                alert("请输入真实姓名");
+                $("#realname").focus();
+                return false;
+            }
+            if($("#nickname").val() == "") {
+                alert("请输入昵称");
+                $("#nickname").focus();
+                return false;
+            }
+            if ($("#password").val() == "") {
+                alert("请输入密码");
+                $("#password").focus();
+                return false;
+            }
+            if ($("#repassword").val() == "") {
+                alert("请输入确认密码");
+                $("#repassword").focus();
+                return false;
+            }
+            if ($("#repassword").val()  != $("#password").val()) {
+                alert("密码与确认密码不一致，请重新输入！");
+                $("#repassword").focus();
+                return false;
+            }
+            if ($("#phone").val() == "") {
+                alert("请输入手机号");
+                $("#phone").focus();
+                return false;
+            }
+            var ajaxregurl = "{:url('ajaxreg')}"
+            $.ajax({
+                url: ajaxregurl, //后台接收数据，进行统一下单操作的地址，填你自己的
+                dataType: 'json',
+                type: 'POST',
+                data: { 'username': $("#username").val(), 'realname': $("#realname").val(),'nickname': $("#nickname").val(), 'password': $("#password").val(), 'repassword': $("#repassword").val(), 'phone': $("#phone").val() },
+                success: function (res) {
+                
+                    if (res.status == 1) {
+                      
+                        alert(res.tishi); 
+                        $("#register").hide();
+                        $("#login").show();
+                    } else {
+                        alert(res.tishi);
+                    }
+
+                }
+
+            });
+
+
+});
+
+
+});
+</script>
+
+
+</body>
+</html>

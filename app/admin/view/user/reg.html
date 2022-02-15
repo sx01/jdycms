@@ -1,0 +1,115 @@
+{include file='public/meta' /}
+    <title>{$title|default='标题'}</title>
+    <meta name="keywords" content="{$keywords|default='关键字'}">
+    <meta name="description" content="{$desc|default='描述'}">
+</head>
+
+<body style="background-color: #fafafa;padding-top: 88px;">
+{include file='public/header' /}
+<div class="container">
+
+    <div class="row"></div>
+    <div class="row">
+
+
+        <div class="col-md-7" style="text-align: center;padding-top: 50px;">
+            <img src="__STATIC__/images/loginlogo.jpg" width="50%" />
+        </div>
+
+        <div class="col-md-5" style="padding-top:48px; ">
+             <h3>{:config("websitename")}·信息系统</h3>
+
+            <form  action="" method="post">
+
+                <input type="hidden" name="tmp" id="tmp" value="{$tmp}" />
+                <div class="form-group">
+                    <label for="username" style="color: #8a7a7a;">用户名</label>
+                    <input type="text" class="form-control" style="border-radius: 0px;width: 220px;" id="username" name="username" placeholder="请输入您的用户名！">
+                </div>
+
+                <div class="form-group">
+                    <label for="nickname" style="color: #8a7a7a;">昵称</label>
+                    <input type="text" class="form-control" style="border-radius: 0px;width: 220px;" id="nickname" name="nickname" placeholder="请输入您的昵称！">
+                </div>
+
+                <div class="form-group">
+                    <label for="email" style="color: #8a7a7a;">邮箱</label>
+                    <input type="email" class="form-control" style="border-radius: 0px;width: 220px;" id="email" name="email" placeholder="请输入您的邮箱！">
+                </div>
+
+                <div class="form-group">
+                    <label for="gender" style="color: #8a7a7a;">性别</label>
+                    <select name="gender" id="gender">
+                        <option value="0">保密</option>
+                        <option value="1">男</option>
+                        <option value="2">女</option>
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+                    <label for="password" style="color: #8a7a7a;">密 码</label>
+                    <input type="password" class="form-control" style="border-radius: 0px;width: 220px;" id="password" name="password" placeholder="请输入密码！">
+                </div>
+                <div class="form-group">
+                    <label for="repassword" style="color: #8a7a7a;">确认密码</label>
+                    <input type="password" class="form-control" style="border-radius: 0px;width: 220px;" id="repassword" name="repassword" placeholder="请输入确认密码！">
+                </div>
+
+                <div class="form-group">
+                    <div  >
+                        <input name="captcha" class="form-control col-md-3" type="text" placeholder="验证码" onblur="if(this.value==''){this.value='验证码:'}" onclick="if(this.value=='验证码:'){this.value='';}" value="" style="width:80px;">
+                        <div class="col-md-9"> <img src="{:captcha_src()}" height="30" id="captcha_img">
+                            <a id="kanbuq" href="javascript:captcha_refresh();">看不清，换一张</a>
+                        </div>
+                    </div>
+                </div>
+                <div style="clear: both;height: 10px;"></div>
+                <div class="form-group">
+
+                    <button type="button" id="reg" style="border-radius: 0px;"   value="akflwewoiefjwoej" class="btn btn-default col-md-3">注册</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+
+
+{include file='public/footer' /}
+
+<script>
+    $(function(){
+        $('#reg').on('click', function(){
+            $.ajax({
+                type: 'POST',
+                url: "{:url('regUser')}",
+                data: $('form').serialize(),
+                dataType: 'json',
+                success: function(data){
+                    if (data.status == 1) {
+                        alert(data.message);
+
+                    } else {
+                        alert(data.message);
+                    }
+                }
+            });
+        })
+    })
+</script>
+
+<!--自动刷新验证码-->
+<script>
+    function captcha_refresh(){
+        var str = Date.parse(new Date())/1000;
+        $('#captcha_img').attr("src", "/captcha?id="+str);
+    }
+</script>
+</body>
+</html>

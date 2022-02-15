@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="{__STATIC_PATH}admin/lib/layui-v2.5.4/css/layui.css" media="all">
+    <link rel="stylesheet" href="{__STATIC_PATH}admin/css/public.css" media="all">
+    <style>
+        .inoutCls {
+            height: 22px;
+            line-height: 22px;
+            padding: 0 5px;
+            font-size: 12px;
+            background-color: #1E9FFF;
+            max-width: 80px;
+            border: none;
+            color: #fff;
+            margin-left: 10px;
+            display: inline-block;
+            white-space: nowrap;
+            text-align: center;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+       
+        <div class="layui-row">
+            <button type="button" class="layui-btn add">添 加</button>  
+        </div>
+        <div class="layui-form" style="margin-top: 20px;">
+            <table class="layui-table">
+                <colgroup>
+                    <col width="40">
+                    <col  >
+                    <col width="100">
+                    <col width="130">
+                    <col width="130">
+                    <col width="70">
+                    <col width="70">
+                    <col  >
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>id</th>
+                    <th>键</th>
+                    <th>值</th> 
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                     
+                <!--一级类目循环-->
+                {volist name="kvList['data']" id="vo"}
+                <tr>
+                    <td>
+                        {$vo.id}
+                    </td>
+                    <td>
+                        {$vo.key}
+                    </td>
+                    <td>
+                     
+                        <?php if($vo['key']=='logo'){ ?>  
+                            <img src="{$vo.value}?time={:time()}" width="100%" />
+                         <?php }else{ ?> 
+                            {$vo.value}
+                         <?php } ?>
+                      
+                    </td> 
+                    <td>
+                        <a class="layui-btn layui-btn-xs layui-btn-danger edit"  data-id="{$vo.id}">编辑</a>
+                        <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete del-child delete" data-ptype="1"
+                           lay-event="delete" data-id="{$vo.id}">删除</a> 
+                    </td>
+                </tr>
+                {/volist}
+                <!--一级类目循环 end-->
+                </tbody>
+            </table>
+        </div>
+ 
+        <div id="pages"></div>
+    </div>
+
+</div>
+<script src="{__STATIC_PATH}admin/lib/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+<script src="{__STATIC_PATH}admin/lib/layui-v2.5.4/layui.js" charset="utf-8"></script>
+<script src="{__STATIC_PATH}admin/js/common.js?v5" charset="utf-8"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+   
+    layui.use(['form', 'laypage'], function () {
+        var form = layui.form
+            , laypage = layui.laypage;
+
+        laypage.render({ //分页
+            elem: 'pages'
+            , count: {$kvList.total}
+            , theme: '#FFB800'
+            , limit:{$kvList.per_page}
+            , curr : {$kvList.current_page}
+            , jump:function(obj,first){
+                if(!first){
+                    location.href = "?page=" + obj.curr  
+                }
+            }
+        });
+
+ // 添加 分类
+         $('.edit').on('click', function () {
+            let id = $(this).attr('data-id'); //  
+            layObj.dialog("{:url('edit')}?id="+id )
+        });
+        // 添加 分类
+        $('.add').on('click', function () {
+            layObj.dialog("{:url('add')}");
+        });
+       
+
+       
+       
+
+         
+
+        // 删除 分类
+        $('.delete').on('click', function () {
+      
+            let id = $(this).attr('data-id'); // fu
+            
+            
+            layObj.box(`是否删除当前分类`, () => {
+                let   url = '{:url("del")}?id=' + id 
+                layObj.get(url,  (res) =>{
+                    // $(this).parent().remove()
+
+                    if(res.status == 1){
+                   window.location.reload();
+                }else{
+                    layObj.msg("删除失败");
+                }
+
+                })
+
+            })
+        })
+
+        
+
+
+    })
+</script>
+</body>
+</html>

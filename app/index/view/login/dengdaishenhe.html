@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+ 
+    <title>用户登录-{$kvlist['网站名称']}</title>
+    <meta name="keywords" content="{$kvlist['网站关键词']}">
+    <meta name="description" content="{$kvlist['网站描述']}">
+   
+    
+    <link rel="stylesheet" href="{__STATIC__}/css/bootstrap.min.css">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+ 
+  </head>
+  <body>
+   
+
+ 
+
+
+
+</head>
+<body>
+
+ 
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">
+          <img alt="{$kvlist['网站名称']}" style="height: 100%;float: left;margin-right: 8px;" src="{$kvlist['前台logo']}">{$kvlist['网站名称']}
+        </a>
+      </div>
+  
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-4">
+        <p class="navbar-text">{$kvlist['网站一句话介绍']}</p>
+      </div>
+     
+    </div>
+  </nav>
+
+  <style>
+
+   img{max-width: 100%;}
+    .ban_register{
+        width: 100%;
+        height: 529px; 
+        
+        display: none;
+    }
+    .registerPart {
+        padding: 0 30px;
+        background: rgba(0,0,0,0.6);
+        height: 529px;
+        text-align: center;
+    }
+    .registerPart h3 {
+        line-height: 93px;
+        text-align: center;
+        font-size: 30px;
+        color: #fff;
+        margin-top: 0px;
+    margin-bottom: 0px;
+    }
+    
+    .registerPart .form-ctl {
+        margin: 20px 0 0;
+    }
+    .registerPart .form-ctl select,  .registerPart .form-ctl input[type="text"], .registerPart .form-ctl input[type="password"] {
+        width: 334px;
+        height: 30px;
+        line-height: 30px;
+        text-indent: 3px;
+        padding-left: 15px;
+        font-size: 12px;
+        background-color: #fff;
+        box-sizing: border-box;
+        font-family: "Microsoft YaHei";
+    }
+    
+    .registerPart .form-ctl .btn-primary {
+        width: 334px;
+        height: 40px;
+        border: none;
+        display: block;
+        box-sizing: border-box;
+        line-height: 40px;
+        background: #fc8026;
+        font-size: 18px;
+        color: #fff;
+        text-align: center;
+        cursor: pointer;
+        margin: 0 auto;
+    }
+    
+    .registerPart .form_ctl button {
+        border: 0;
+        outline: none;
+        background-color: transparent;
+        color: #fc8026;
+        cursor: pointer;
+    }
+    .ban_middle {
+        width: 100%;
+        height: 349px; 
+         
+    }
+    .loginPart {
+        width: 100%;
+        height: 349px;
+        float: right;
+        background: rgba(0,0,0,0.6);
+    }
+    .loginPart h3 {
+        line-height: 93px;
+        text-align: center;
+        font-size: 30px;
+        color: #fff;
+        margin-top: 0px;
+    margin-bottom: 0px;
+    }
+    
+    .loginPart input {
+        width: 334px;
+        height: 48px;
+        border: none;
+        display: block;
+        padding-left: 15px;
+        box-sizing: border-box;
+        font-size: 14px;
+        color: #999;
+        line-height: 48px;
+        margin: 0 auto 24px;
+        font-family: "Microsoft YaHei";
+    }
+    .loginPart .form-check {
+        width: 334px;
+        margin: 0 auto;
+        padding: 0px 10px;
+        overflow: hidden;
+    }
+    .loginPart .form-check .btn-default {
+        float: right;
+        color: #fff;
+        border: 0;
+        outline: none;
+        background-color: transparent;
+        cursor: pointer;
+    }
+    .loginPart .login_btn {
+        background: #fc8026;
+        font-size: 18px;
+        color: #fff;
+        text-align: center;
+    }
+    
+    .ban_middle .fix_tip {
+        width: 334px;
+        height: 48px;
+        border: 1px solid #f5e79e;
+        background: #f5e79e;
+        color: #8a6d3b;
+        padding-left: 40px;
+        box-sizing: border-box;
+        line-height: 48px;
+        position: absolute;
+        left: 34px;
+        top: 33px;
+        border-radius: 5px;
+        opacity: 0;
+    }
+        </style>
+    
+
+
+
+<div class="ban_middle" id="login">
+    <div class="loginPart" >
+        <p style="text-align: center;font-size: 15px; color:#fff;margin: 30px;">{$nickname?$nickname:''}您好,审核中。。。 ，请耐心等待或者联系管理员.
+            
+            </p>
+
+            <p style="text-align: center;"><a href="{:url('logout')}" style="color: rgb(219, 214, 214);font-size: 13px;">退出登录</a></p>
+
+            <p style="text-align: center;"><a href="{:url('index/index/index')}" style="color: rgb(219, 214, 214);font-size: 13px;">刷新看看</a></p>
+    </div>
+</div>
+
+ 
+
+
+<p style="text-align: center;margin-top: 66px;">
+<strong>Copyright &copy; {$kvlist['网站CopyRight']|default="2020"}  <a href="#">{$kvlist['网站名称']|default="网站名称"}</a>.</strong>
+All rights reserved.</p>
+
+<script src="{__STATIC__}/js/jquery.min.js"></script>
+
+<!-- Bootstrap core JS file
+  注意：此文件跟随官网最新版本更新，随时会有改变。建议使用下面v3.0.3版本的CDN链接！
+ -->
+
+<!-- Hi，如果你要在自己的网站上引入bootstrap JS文件的话，请使用当前最新版本v3.0.3的CDN链接，页面加载速度会更快！-->
+<script src="{__STATIC__}/js/bootstrap.min.js"></script>
+<script>
+ 
+var uid = '{$uid}';
+$(document).ready(function(){
+
+
+
+});
+</script>
+
+
+</body>
+</html>

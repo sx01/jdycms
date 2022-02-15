@@ -1,0 +1,242 @@
+{include file='public/meta' /}
+
+
+<title>{$title|default='页面标题'}</title>
+<meta name="keywords" content="{$keywords|default='页面关键字'}">
+<meta name="description" content="{$desc|default='页面描述'}">
+
+</head>
+<body>
+
+
+{include file='public/header' /}
+
+
+
+<div class="container-fluid">
+
+<div class="container" style="margin-top:10px;margin-bottom: 10px;">
+
+
+
+
+<div class="row" style="background-color: #fefefe;padding-top:20px;margin: 0px;margin-top: 10px; ">
+<div class="col-md-12">
+<!--客户中心-->
+
+
+
+
+
+
+<form class="form-horizontal" action="" enctype="multipart/form-data" method="post" onsubmit="return btnOK_onclick();">
+
+
+
+    <div class="form-group" style="margin-bottom: 66px;border-bottom: 1px solid #38AF87; ">
+        <label  class="col-sm-2 control-label" style="text-align: left;">添加基本信息</label>
+        <div class="col-sm-10">
+
+
+       </div>
+    </div>
+
+    <div class="form-group">
+        <label for="pic" class="col-sm-2 control-label">后台logo</label>
+        <div class="col-sm-8">
+            <img style="background: #ccc;padding: 5px;" src="{$kvlist['后台logo']|default=''}" id="houtailogo" width="60" />
+
+            <input type="file" class="form-control inputbc" name="houtailogo" id="houtailogo" />
+
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="pic" class="col-sm-2 control-label">前台logo</label>
+        <div class="col-sm-8">
+            <img style="background: #ccc;padding: 5px;" src="{$kvlist['前台logo']|default=''}" id="logo" width="60" />
+
+            <input type="file" class="form-control inputbc" name="pic" id="pic" />
+
+        </div>
+    </div>
+
+
+    <?php 
+     $nodeletearr = array("后台logo","前台logo","网站名称","网站一句话介绍","网站描述","网站关键词","网站ICP","网站CopyRight","网站网址","服务热线","公司地址","公司名称");
+    foreach($kvlist as $k=>$v){
+    if($k!="后台logo" && $k!="前台logo" ){
+    ?>
+    <div class="form-group" id="ziduan_{$k}">
+        <label for="{$k}" class="col-sm-2 control-label">{$k}</label>
+        <div class="col-sm-6">
+
+            <input type="text" id="{$k}" class="form-control inputbc" placeholder="请输入{$k}"   value="{$v}" name="{$k}">
+
+        </div>
+        <div class="col-sm-2">
+            <?php if(in_array($k, $nodeletearr)){ ?>
+            
+            <?php }else{ ?>
+                <button type="button"   datakey="{$k}" class="btn   btndel btn-danger btn-sm" >删除此项</button>
+            <?php } ?>
+        
+        </div>
+    </div>
+    <?php
+          }
+           }
+
+          ?>
+
+    <div id="addziduan">
+
+
+
+    </div>
+
+    <div class="form-group">
+
+        <div class="col-sm-2 control-label"></div>
+        <div class="col-sm-8" style="text-align: center;">
+            <button type="submit"  id="btnOK" class="btn btn-success btn-sm" onclick="return btnOK_onclick()">保存修改</button>
+            ｜  <button type="button"  id="btnadd" class="btn btn-success btn-sm" >增加一个项</button>
+        </div>
+    </div>
+
+
+
+</form>
+
+
+</div>
+</div>
+</div>
+</div>
+
+{include file='public/footer' /}
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="btnaddModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">添加一项基本信息</h4>
+            </div>
+            <div class="modal-body">
+
+                <input type="text" id="xiangmingcheng" class="form-control" placeholder="请输入项名称"   value="" >
+                <input type="text" id="xiangzhi" class="form-control" placeholder="请输入项内容"   value="" >
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="addxiang">添加</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    $("document").ready(function() {
+
+        $("#logo").attr('src','{$kvlist["前台logo"]|default=""}?'+Math.random());
+
+        $("#houtailogo").attr('src','{$kvlist["后台logo"]|default=""}?'+Math.random());
+
+        $("#btnadd").click(function(){
+
+            $('#btnaddModal').modal('show');
+
+
+        });
+
+
+
+        $(".btndel").click(function(){
+
+            var k=$(this).attr("datakey");
+
+
+            if(confirm('确认删除吗？')){
+                $.get("{:url('admin/basicinformation/delkv')}", { "key": k },
+                        function(data){
+                            if(data.status){
+
+
+
+                                var   	tmphtml="<div id=\"tmpalert\"  class=\"alert alert-warning alert-dismissible fade in\" role=\"alert\">"
+                                        +"				         							      <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">"
+                                        +"				         					      <span aria-hidden=\"true\">×</span></button>"
+                                        +"				         					      <p id=\"tmpalert_p\"><strong>Holy guacamole!</strong> Best check yo self, you\'re not looking too good.</p>"
+                                        +"				         					    </div>";
+
+                                $("#ziduan_"+k).after(tmphtml);
+                                $("#ziduan_"+k).remove();
+                                $("#tmpalert_p").html(data.tishi);
+                                setTimeout(function(){
+                                    $("#tmpalert").alert('close');
+                                },1000);
+
+                            }else{
+                                alert(data.tishi);
+
+
+                            }
+
+                        });
+
+            }
+
+
+
+        });
+
+        $("#addxiang").click(function(){
+
+            var xiangmingcheng=$("#xiangmingcheng").val();
+            var xiangzhi=$("#xiangzhi").val();
+
+            var htmlstr="<div class=\"form-group\">"
+                    +"<label for='"+xiangmingcheng+"' class=\"col-sm-2 control-label\">"+xiangmingcheng+"</label>"
+                    +"<div class=\"col-sm-8\">"
+                    +"<input type=\"text\" id='"+xiangmingcheng+"' class=\"form-control\" placeholder='请输入"+xiangmingcheng+"'   value='"+xiangzhi+"' name='"+xiangmingcheng+"'>"
+                    +"</div>"
+                    +"</div>";
+
+
+            $("#addziduan").html(htmlstr);
+
+            $('#btnaddModal').modal('hide');
+
+        });
+
+
+
+    });
+
+
+
+    function btnOK_onclick() {
+        var gongsishuoming = $("#gongsishuoming").val();
+
+//              if (gongsishuoming == "") {
+//                  alert("请填写要添加的公司说明!");
+//                  return false;
+//              }
+
+
+        // window.location.href = "index.php?s=/Home/Oil/oilresults/brand/" + brand + "/Model/" + models + "/Displacement/" + displacement + "/Date/" + date;
+        return true;
+    }
+
+
+</script>
+
+</body>
+</html>

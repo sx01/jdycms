@@ -1,0 +1,77 @@
+{include file='public/meta' /}
+
+
+<title>{$title|default='页面标题'}</title>
+<meta name="keywords" content="{$keywords|default='页面关键字'}">
+<meta name="description" content="{$desc|default='页面描述'}">
+
+</head>
+<body>
+
+
+{include file='public/header' /}
+
+
+
+<div class="container-fluid">
+
+
+    <div class="container cheight"  style="margin-top:10px;">
+
+
+        <div class="row">
+
+
+
+            <div class="col-md-12" style="margin: 0px;
+ padding: 0px;">
+
+
+                <div class="panelx panel-info"  >
+
+                    <div class="panel-body">
+
+
+
+
+
+                        <p>登录次数：{$member.login_count}</p>
+                        <p>上次登录IP：{$member.lastloginip}   上次登录时间：{:date("Y-m-d H:i:s", $member.lastlogintime)}</p>
+
+                        <table class="table table-border table-bordered table-bg mt-20">
+                            <thead>
+                            <tr>
+                                <th colspan="2" scope="col">服务器信息</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <th width="30%">服务器计算机名</th>
+                                <td><span id="lbServerName">{$Request.host}</span></td>
+                            </tr>
+                            
+
+                           
+
+                            </tbody>
+                        </table>
+
+
+
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{include file='public/footer' /}
+
+
+
+</body>
+</html>

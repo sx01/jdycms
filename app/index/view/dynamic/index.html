@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<title>
+    {$find.title}-{$kvlist['网站名称']|default=""}</title>
+<meta name="keywords" content="{$find['keywords']|default='网站建设,网站制作,网站开发,建网站,网站维护,简单实用,升级更新,小程序'}">
+<meta name="description" content="{$find['description']|default='大树网络一直致力于网站建设小程序开发的体系化，流程化，无我化;解放决策者思想，一切从实际情况出发,用简单实用的方式传达企业形象;服务热线:199-0326-5220'}"/>
+<meta charset="UTF-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta name="applicable-device" content="pc,wap">
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+
+
+{include file='public/meta' /}
+  
+
+
+</head>
+<body>
+  {include file='public/header' /}
+ 
+  <div class="container">
+
+
+    <div class="row">
+      <div class="col-md-8">
+        <div class="page-header">
+          <h1><a href="/">首页</a><small>内容</small></h1>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-body">
+  <style>
+    .title{
+      font-size: 18px;
+  text-align: center;
+  height: auto;
+  line-height: 30px;
+  
+    }
+    .content{
+  
+      padding: 10px;
+line-height: 28px;
+color: #333;
+
+margin: 0px auto;
+
+    }
+    .content img{
+      max-width: 100%;
+    }
+  .tuozhan{
+    padding: 10px;
+line-height: 28px;
+color: #333;
+
+margin: 0px auto;
+  }
+  </style>
+  <div class="title">{$find.title}</div>
+  <div class="content">
+    {:htmlspecialchars_decode($find.content)}
+   
+  </div>
+
+  <div class="tuozhan">
+    <p>{$find['一句话描述']|default=''}</p>
+    <?php if($find['安装包']){ ?> 
+      <p> <a href="{$find['安装包']}" target="_blank">点此下载</a></p>
+    <?php } ?>
+  </div>
+
+  </div>
+  </div>
+</div>
+
+<div class="col-md-4">
+        
+  <div class="page-header">
+    <h1>热门资讯<small>为企业服务的相关资讯</small></h1>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-body">
+ 
+    <div class="_hot-articles">
+    
+      <div class="_hot-articles-list">
+        <?php 
+        $zixunlist = getContentListByCatId(7); //根据分类ID获取内容列表
+        foreach($zixunlist as $k=>$v){ 
+          $k=$k+1;
+          $link_url = $v['link_url']?$v['link_url']:url('index/dynamic/index',['id'=>$v['id']]);
+           
+          ?>
+        <a href="{$link_url}" target="_blank" class="_hot-articles-titile"><span
+            class="_hot-articles-order _hot-articles-order{$k}">{$k}</span>{$v.title}</a>
+           <?php } ?>
+         
+          </div>
+     </div> 
+
+     </div>
+     </div>
+  
+
+
+
+</div>
+
+</div>
+</div>
+
+  {include file='public/footer' /}
+  
+ 
+  <script>
+  
+
+  $(document).ready(function(){
+
+     
+ 
+
+
+});
+  </script>
+ 
+  </body>
+  </html>
+  

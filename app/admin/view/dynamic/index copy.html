@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>内容管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="{__STATIC_PATH}admin/lib/layui-v2.5.4/css/layui.css" media="all">
+    <link rel="stylesheet" href="{__STATIC_PATH}admin/css/public.css" media="all">
+    <style>
+        .inoutCls {
+            height: 22px;
+            line-height: 22px;
+            padding: 0 5px;
+            font-size: 12px;
+            background-color: #1E9FFF;
+            max-width: 80px;
+            border: none;
+            color: #fff;
+            margin-left: 10px;
+            display: inline-block;
+            white-space: nowrap;
+            text-align: center;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <div class="layui-row" style="margin-bottom: 10px;">
+
+            <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                <div class="layui-form-item search-form">
+                
+                  <div class="layui-inline">
+                    <label class="layui-form-label">标题</label>
+                    <div class="layui-input-inline">
+                      <input type="text" name="name" value="{$name}" data_url="{:url('index')}" placeholder="请输入" autocomplete="off" class="layui-input search-input">
+                    </div>
+                  </div>
+
+                  
+                  <div class="layui-inline">
+                    <label class="layui-form-label">请选择范围</label>
+                    <div class="layui-input-inline">
+                      <input type="text" class="layui-input" name="time" value="{$time}" id="time" placeholder="开始 到 结束">
+                    </div>
+                  </div>
+                  <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-list" data_url="{:url('index')}" id="btn_search" lay-filter="LAY-app-contlist-search">
+                      <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                  </div>
+
+                  <a href="/admin/dynamic/add" style="float: right;" class="layui-btn">添 加</a> 
+                </div>
+              </div>
+
+
+
+               
+          
+
+        </div>
+       
+     
+        <div class="layui-form" style="margin-top: 20px;">
+            <table class="layui-table">
+                <colgroup>
+                    <col width="40">
+                    <col  >
+                    <col  >
+                    <col width="100">
+                    <col width="130">
+                    <col width="130">
+                    <col width="70">
+                    <col width="70">
+                    <col  >
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>id</th>
+                    <th>图片</th>
+                    <th>标题</th> 
+                    <th>排序</th> 
+                    <th>是否首页推荐</th>
+                    <th class="text-center">状 态</th>
+                    <th class="text-center">创建时间</th> 
+                    <th class="text-center">操作人</th>
+                    <th>操作管理</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!--一级类目循环-->
+                {volist name="list['data']" id="vo"}
+                <tr>
+                    <td>
+                        {$vo.id}
+                    </td>
+                    <td>
+                        <img src="{$vo.pic_path}" height="60" />
+                    </td>
+                    <td>
+                        {$vo.title}
+                    </td>
+                
+                    <td>
+                        <div class="layui-input-inline">
+                          <input type="text" value="{$vo.listorder}" data-id="{$vo.id}" class="changeSort layui-input">
+                        </div>
+                    </td>
+
+                    <td data-id="{$vo.id}"><input type="checkbox" {if $vo.is_index_recommend == 1} checked {else /} {/if} name="is_index_recommend" lay-skin="switch"
+                        lay-filter="switchIs_index_recommend"
+                        lay-text="ON|OFF">
+ </td>
+
+                    <td data-id="{$vo.id}"><input type="checkbox" {if $vo.status == 1} checked {else /} {/if} name="status" lay-skin="switch"
+                        lay-filter="switchStatus"
+                        lay-text="ON|OFF">
+ </td>
+
+                    <td>
+                        {$vo.create_time}
+                    </td>
+                     
+                   <td>
+                    {$vo.operate_user}
+               </td>
+                    
+                
+
+
+                    <td>
+                        <a class="layui-btn layui-btn-xs layui-btn-danger " href="/admin/dynamic/edit?id={$vo.id}" target="_self"  data-id="{$vo.id}">编辑</a>
+                        <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete del-child delete" data-ptype="1"
+                           lay-event="delete" data-id="{$vo.id}">删除</a> 
+                    </td>
+                </tr>
+                {/volist}
+                <!--一级类目循环 end-->
+                </tbody>
+            </table>
+        </div>
+       
+        <div id="pages"></div>
+    </div>
+
+</div>
+<script src="{__STATIC_PATH}admin/lib/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+<script src="{__STATIC_PATH}admin/lib/layui-v2.5.4/layui.js" charset="utf-8"></script>
+<script src="{__STATIC_PATH}admin/js/common.js?v5" charset="utf-8"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+    layui.use(['form', 'laypage','laydate'], function () {
+        var form = layui.form
+            , laypage = layui.laypage;
+            var laydate = layui.laydate;
+            laydate.render({
+    elem: '#time'
+    ,type: 'datetime'
+    ,range: '到'
+    ,format: 'yyyy-M-d H:m:s'
+  });
+
+        laypage.render({ //分页
+            elem: 'pages'
+            , count: {$list.total}
+            , theme: '#FFB800'
+            , limit:{$list.per_page}
+            , curr : {$list.current_page}
+            , jump:function(obj,first){
+                if(!first){
+                    location.href = "?page=" + obj.curr 
+                }
+            }
+        });
+
+        
+
+        //搜索功能
+        $("#btn_search").click(function(){
+                    var url = $(this).attr('data_url');
+
+                    var query  = $('.search-form').find('input').serialize();
+                    query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g,'');
+                    query = query.replace(/^&/g,'');
+                    if( url.indexOf('?')>0 ){
+                        url += '&' + query;
+                    }else{
+                        url += '?' + query;
+                    }
+                    window.location.href = url;
+                });
+                //回车搜索
+                $(".search-input").keyup(function(e){
+                    if(e.keyCode === 13){
+                        $("#btn_search").click();
+                        return false;
+                    }
+                });
+
+ // 添加 分类
+//  $('.edit').on('click', function () {
+//     let id = $(this).attr('data-id'); //  
+//             layObj.dialog("{:url('edit')}?id="+id)
+//         });
+        // 添加 分类
+        // $('.add').on('click', function () {
+        //     layObj.dialog("{:url('add')}")
+        // });
+
+        //监听状态 更改
+        form.on('switch(switchStatus)', function (obj) {
+           
+
+            let id = obj.othis.parent().attr('data-id');
+            let status = obj.elem.checked ? 1 : 0;
+            $.ajax({
+                url: '{:url("status")}?id=' + id + '&status=' + status,
+                success: (res) => {
+                    if(res.status == 1){
+                   window.location.reload();
+                }else{
+                    layer.msg("修改状态失败");
+                }
+                }
+            });
+            return false;
+        });
+
+            //监听状态 更改
+            form.on('switch(switchIs_index_recommend)', function (obj) {
+           
+
+           let id = obj.othis.parent().attr('data-id');
+           let is_index_recommend = obj.elem.checked ? 1 : 0;
+           $.ajax({
+               url: '{:url("editfield")}?id=' + id + '&field=is_index_recommend&value=' + is_index_recommend,
+               success: (res) => {
+                   if(res.status == 1){
+                  window.location.reload();
+               }else{
+                   layer.msg("修改失败");
+               }
+               }
+           });
+           return false;
+       });
+
+
+       
+
+        // 删除 分类
+        $('.delete').on('click', function () {
+            let ptype = $(this).attr('data-ptype'); // fu
+            let id = $(this).attr('data-id'); // fu
+            let msg = '';
+            
+            layObj.box(`是否删除当前内容`, () => {
+                let   url = '{:url("status")}?id=' + id + "& status=99"
+                layObj.get(url,  (res) =>{
+                    // $(this).parent().remove()
+
+                    if(res.status == 1){
+                   window.location.reload();
+                }else{
+                    layer.msg("删除失败");
+                }
+
+                })
+
+            })
+        })
+
+        $('.changeSort').on('change',function () {
+            let id = $(this).attr('data-id');
+            let val = $(this).val();
+
+            if(!val){
+                return;
+            }
+            let url = '{:url("listorder")}?id=' + id + '&listorder='+val;
+            
+            layObj.get(url,function (res) {
+                console.log(res, 'listorder');
+                if(res.status == 1){
+                   window.location.reload();
+                }else{
+                    layer.msg("排序失败");
+                }
+            })
+
+        })
+
+
+    })
+</script>
+</body>
+</html>

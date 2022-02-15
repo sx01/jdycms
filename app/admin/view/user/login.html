@@ -1,0 +1,99 @@
+{include file='public/meta' /}
+    <title>{$title|default='标题'}</title>
+    <meta name="keywords" content="{$keywords|default='关键字'}">
+    <meta name="description" content="{$desc|default='描述'}">
+</head>
+
+<body style="padding-top: 50px;">
+{include file='public/header' /}
+<div class="container-fluid" style="position: relative;padding: 0px;margin: 0px;">
+    <div style="width:100%; max-height: 450px; position: absolute;z-index: -1;">
+        <!-- <img src="__STATIC__/images/app/bg_banner.png" width="100%" style="max-height: 450px;" /> -->
+    </div>
+
+<div class="container" style="height:450px; ">
+
+    <div class="row"></div>
+    <div class="row">
+
+
+        <div class="col-md-4" style="text-align: center;padding-top: 50px;">
+
+        </div>
+
+        <div class="col-md-4" style="padding-top:48px; ">
+             <h3 style="color: #333;font-size: 18px;margin-bottom: 10px;">{$kvlist['网站名称']?$kvlist['网站名称']:''}·信息系统</h3>
+
+            <form  action="" method="post">
+                <div class="form-group">
+                    <label for="name" style="color: #8a7a7a;">用户名</label>
+                    <input type="text" class="form-control" style="border-radius: 0px;width: 220px;" id="name" name="name" placeholder="请输入您的管理用户名！">
+                </div>
+                <div class="form-group">
+                    <label for="password" style="color: #8a7a7a;">密 码</label>
+                    <input type="password" class="form-control" style="border-radius: 0px;width: 220px;" id="password" name="password" placeholder="请输入密码！">
+                </div>
+
+
+                <div class="form-group">
+                    <div  >
+                    <input name="captcha" class="form-control col-md-3" type="text" placeholder="验证码" onblur="if(this.value==''){this.value='验证码:'}" onclick="if(this.value=='验证码:'){this.value='';}" value="" style="width:80px;">
+                    <div class="col-md-9"> <img src="/index/{:captcha_src()}" height="30" id="captcha_img">
+                    <a id="kanbuq" href="javascript:captcha_refresh();">看不清，换一张</a>
+                    </div>
+                    </div>
+                </div>
+                <div style="clear: both;height: 10px;"></div>
+                <div class="form-group">
+
+                <button type="button" id="login" style="border-radius: 0px;"   value="akflwewoiefjwoej" class="btn btn-default col-md-3">登录</button>
+                    </div>
+            </form>
+        </div>
+
+    </div>
+
+
+</div>
+
+
+</div>
+
+
+
+{include file='public/footer' /}
+
+
+<!--ajax提交-->
+<script>
+    $(function(){
+        $('#login').on('click', function(){
+            $.ajax({
+                type: 'POST',
+                url: "{:url('checkLogin')}",
+                data: $('form').serialize(),
+                dataType: 'json',
+                success: function(data){
+                    if (data.status == 1) {
+                        alert(data.message);
+                        window.location.href="{:url('index/index')}";
+                    } else {
+                        alert(data.message);
+                        captcha_refresh();
+                    }
+                }
+            });
+        })
+    })
+</script>
+
+<!--自动刷新验证码-->
+<script>
+    function captcha_refresh(){
+        var str = Date.parse(new Date())/1000;
+        $('#captcha_img').attr("src", "/index/captcha?id="+str);
+    }
+</script>
+
+</body>
+</html>

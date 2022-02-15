@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>添加基本信息</title>
+    <link rel="stylesheet" href="{__STATIC_PATH}admin/lib/layui-v2.5.4/css/layui.css" media="all">
+    <link rel="stylesheet" href="{__STATIC_PATH}admin/css/public.css" media="all">
+</head>
+<body>
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+    <legend>基本信息管理</legend>
+</fieldset>
+
+<form class="layui-form" action="">
+ 
+    <div class="layui-form-item">
+        <label class="layui-form-label"style="width: 15%;">键</label>
+        <div class="layui-input-inline" style="width: 70%;">
+            <input type="text" name="key" lay-verify="key" id="key" autocomplete="off" placeholder="请输入键"
+                   class="layui-input">
+        </div>
+    </div>
+
+   
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width: 15%;">值</label>
+        <div class="layui-input-inline" style="width: 70%;">
+       
+                <div class="layui-upload"  id="upload_div" style="display: none;">
+                    <button type="button" class="layui-btn" id="btn_show" >上传图片</button>
+                    <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+                        预览（图片已经上传到服务器，如果不用请点右上角删除掉）：
+                        <div class="layui-upload-list" id="show_img"  >
+
+                        </div>
+                        <div style="clear: both;"></div>
+                    </blockquote>
+                </div>
+              
+                
+                <input type="text" name="value" lay-verify="value" id="value" autocomplete="off" placeholder="请输入值"
+                   class="layui-input">
+            
+
+         
+        </>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width: 200px;"></label>
+        <div class="layui-input-inline">
+            <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="demo1">立即提交</button>
+        </div>
+    </div>
+</form>
+<script src="{__STATIC_PATH}admin/lib/layui-v2.5.4/layui.js" charset="utf-8"></script>
+<script src="{__STATIC_PATH}admin/lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+<script src="{__STATIC_PATH}admin/js/common.js" charset="utf-8"></script>
+<script>
+ 
+
+    layui.use(['form','laypage','upload'], function () {
+        var form = layui.form;
+        var $ = layui.jquery,upload = layui.upload;
+
+        upload.render({
+        elem:'#btn_show'
+        ,url:'/admin/image/upload'
+        ,data:{savename:'logo'}
+        ,multiple:true
+        ,done:function(res){
+            //如果上传失败
+            if(res.status == 0 ){
+                return layer.msg('上传失败');
+            }
+            $('#value').val(res.result.image);
+            $('#show_img').html('<div class="img-wrap"><button type="button" data_imgsrc="'+res.result.image+'" class="layui-btn layui-btn-sm clearImg"><i class="layui-icon">&#xe640;</i></button><img src="'+res.result.image+'?time='+Date.parse(new Date())+'"    class="layui-upload-img" /></div>');
+        }
+     });
+
+     $("#key").keyup(function(){
+         if($(this).val()=="logo"){
+            $("#upload_div").show();
+            $("#value").hide();
+        }else{
+    $("#upload_div").hide();
+    $("#value").show();
+ }
+   
+      });
+     $("body").on("click", ".clearImg", function () {
+    
+    var imgsrc = $(this).attr("data_imgsrc");
+    //发送ajax请求
+    layObj.post('/admin/image/delimg',{'imgsrc':imgsrc},(res)=>{
+       if(res.status == 1){
+           $(this).parent().remove();//删除了div 
+           layer.msg(res.message);
+       }else{
+           $(this).parent().remove();//删除了div 
+           layer.msg(res.message);
+       }
+
+   });
+
+});
+       
+        //监听提交
+        form.on('submit(demo1)', function (data) {
+            console.log(data.field, '最终的提交信息')
+            
+            // let url = '';
+            // layObj.post(url,data,function (res) {
+
+            // });
+            $.ajax({
+                type:"POST",
+                data:data.field,
+                url: '/admin/kv/save',
+                success(res){
+                    //todo
+                    if(res.status==1){
+                        // setTimeout('window.location.reload()',1000);
+                        alert("新增成功")
+                        layObj.msg(res.message);
+    //假设这是iframe页
+var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+parent.layer.close(index); //再执行关闭     
+parent.location.reload();  
+                        
+                    }else{
+                        layObj.msg(res.message);
+                        alert(res.message)
+                         
+                        return false;
+
+                    }
+                }
+            })
+
+            return false;
+        });
+
+    })
+</script>
+</body>
+</html>
